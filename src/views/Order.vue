@@ -1,12 +1,12 @@
 <template>
-  <div class="home">
-    首页
+  <div class="order">
+    订单
   </div>
 </template>
 
 <script>
 export default {
-  name: "home",
+  name: "order",
 };
 </script>
 

@@ -30,7 +30,9 @@ export default {
 
         function onComplete(data) {
           // data是具体的定位信息 精准定位 pc端有可能出问题
-          console.log(data);
+          // console.log(data);
+          self.$store.dispatch("setLocation", data);
+          self.$store.dispatch("setAddress", data.formattedAddress);
         }
 
         function onError() {
@@ -42,6 +44,7 @@ export default {
     },
     // ip定位获取城市
     getLngLatLocation() {
+      const self = this;
       // eslint-disable-next-line no-undef
       AMap.plugin("AMap.CitySearch", function() {
         // eslint-disable-next-line no-undef
@@ -65,7 +68,19 @@ export default {
               geocoder.getAddress(lnglat, function(status, data) {
                 if (status === "complete" && data.info === "OK") {
                   // result为对应的地理位置详细信息
-                  console.log(data)
+                  // console.log(data)
+                  self.$store.dispatch("setLocation", {
+                    addressComponent: {
+                      city: result.city,
+                      province: result.province,
+                    },
+                    formattedAddress: data.regeocode.formattedAddress,
+                  });
+
+                  self.$store.dispatch(
+                    "setAddress",
+                    data.regeocode.formattedAddress
+                  );
                 }
               });
             });

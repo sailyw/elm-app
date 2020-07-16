@@ -1,5 +1,5 @@
 <template>
-    <div class="alphabet" v-if="cityInfo">
+    <div class="area" ref="area_scroll" v-if="cityInfo">
         <!-- 封装字母表 -->
         <div class="scroll_wrap">
             <!-- 热门城市 -->
@@ -25,12 +25,26 @@
 </template>
 
 <script>
+import BScroll from 'better-scroll'
 export default {
     name:"Alphabet",
     // 从city接收数据
     props:{
         cityInfo:Object,
         keys:Array
+    },
+    data(){
+        return {
+            scroll:null
+        }
+    },
+    methods:{
+        initScroll(){
+            //   实例化  第一个参数，滚动的区域；第二个参数，滚动的属性，例如点击
+            this.scroll = new BScroll(this.$ref.area_scroll,{
+                click:true
+            });
+        }
     }
 }
 </script>

@@ -11,21 +11,29 @@
           <div class="location">
               <Location :address="city"/>
           </div>
+          <Alphabet :cityInfo="cityInfo" :keys="keys"/>
       </div>
   </div>
 </template>
 
 <script>
 import Location from '../components/Location';
+import Alphabet from '../components/Alphabet';
 export default {
   name: "city",
   data(){
       return{
-          city_val:''
+          city_val:'',
+          cityInfo:null,//总数据
+          keys:[]//A-Z数字以及热门城市
       }
   },
   components:{
-      Location
+      Location,
+      Alphabet
+  },
+  created(){
+      this.getCityInfo();
   },
   computed:{
     //   拿到城市
@@ -34,6 +42,25 @@ export default {
         this.$store.getters.location.addressComponent.city ||
         this.$store.getters.location.addressComponent.province 
       );
+    }
+  },
+  methods:{
+    //   获取城市信息
+    getCityInfo(){
+        this.$axios("/api/posts/cities")
+          .then(res=>{
+            this.cityInfo = res.data;
+            // 处理key 计算key(A-Z + hotCities)
+            this.keys = Object.keys(res.data);
+            console.log(this.keys)
+            // 移除hotCities这个key
+            this.keys.pop()
+            //将keys进行排序
+            this.keys.sort();
+            console.log(this.keys)
+          }).catch(err=>{
+            console.log(err)
+          })
     }
   }
 };
